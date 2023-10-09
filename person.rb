@@ -1,8 +1,8 @@
 class Person
   attr_accessor :name
-  attr_accessor :id, :age
+  attr_reader :id, :age
 
-  def initialize(name = 'Unknown', age, parent_permission: true)
+  def initialize(age, name = 'Unknown', parent_permission: true)
     @id = generate_id
     @name = name
     @age = age
