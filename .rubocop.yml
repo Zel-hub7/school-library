@@ -1,6 +1,7 @@
 AllCops:
   NewCops: enable
   Exclude:
+    - "C:/Users/Zola/Desktop/school-library/person.rb"
     - 'person.rb'
     - "Guardfile"
     - "Rakefile"
