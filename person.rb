@@ -1,8 +1,11 @@
-class Person
+require_relative 'nameable'
+
+class Person < Nameable
   attr_accessor :name, :age
   attr_reader :id
 
   def initialize(age, name = 'Unknown', parent_permission: true)
+    super()
     @id = generate_id
     @name = name
     @age = age
@@ -25,5 +28,11 @@ class Person
 
   def generate_id
     rand(10_000..99_999)
+  end
+
+  public
+
+  def correct_name
+    @name
   end
 end
