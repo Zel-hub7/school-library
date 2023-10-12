@@ -12,7 +12,7 @@ class Student < Person
   def assign_to_classroom(classroom)
     return if classroom == @classroom
 
-    @classroom.students.delete(self) if @classroom
+    @classroom&.students&.delete(self)
 
     @classroom = classroom
     classroom.add_student(self)
