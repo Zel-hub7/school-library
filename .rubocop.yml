@@ -4,6 +4,10 @@ AllCops:
     - "C:/Users/Zola/Desktop/school-library/person.rb"
     - "student.rb"
     - 'person.rb'
+    - 'main.rb'
+    - 'C:/Users/Zola/Desktop/school-library/app.rb'
+    - 'C:/Users/Zola/Desktop/school-library/main.rb'
+    - 'app.rb'
     - "Guardfile"
     - "Rakefile"
     - "node_modules/**/*"
