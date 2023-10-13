@@ -58,7 +58,7 @@ class App
 
     specialization = find_or_create_specialization(specialization_label)
 
-    teacher = Teacher.new(name: name, age: age, specialization: specialization)
+    teacher = Teacher.new(specialization, age, name)
     @people << teacher
     puts 'Person created successfully!'
   end
@@ -73,17 +73,18 @@ class App
   def create_student
     puts 'Enter age:'
     age = gets.chomp.to_i
-
+  
     puts 'Enter name for the student:'
     name = gets.chomp
-
+  
     puts 'Has parent permission?(Y/N):'
     parent_permission = gets.chomp.upcase == 'Y'
-
-    student = Student.new(name: name, age: age, parent_permission: parent_permission)
+  
+    student = Student.new(age, name, parent_permission)
     @people << student
-    puts 'Person created succesfully!'
+    puts 'Person created successfully!'
   end
+  
 
   def find_or_create_classroom(label)
     classroom = @classrooms.find { |c| c.label == label }

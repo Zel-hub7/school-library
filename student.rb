@@ -1,24 +1,9 @@
-require_relative 'Person'
-require_relative 'classroom'
+require_relative 'person'
 
 class Student < Person
-  attr_reader :classroom
+  attr_accessor :name, :classroom
 
-  def initialize(age:, classroom:, name: 'Unknown', parent_permission: true)
-    super(name: name, age: age, parent_permission: parent_permission)
-    assign_to_classroom(classroom) if classroom
-  end
-
-  def assign_to_classroom(classroom)
-    return if classroom == @classroom
-
-    @classroom&.students&.delete(self)
-
-    @classroom = classroom
-    classroom.add_student(self)
-  end
-
-  def play_hooky
-    '¯\\(ツ)/¯'
+  def initialize(age, name, parent_permission)
+    super(age, name, parent_permission: parent_permission)
   end
 end
