@@ -24,15 +24,14 @@ class App
   def list_people
     puts 'List of People:'
     @people.each do |person|
-        case person
-        when Teacher
-          puts "[Teacher] Name:#{person.name} ID: #{person.id}  Age:#{person.age}"
-        when Student
-          puts "[Student] Name:#{person.name} ID:#{person.id} Age:#{person.age}"
-        else
-          puts "Unknown Type: Name: #{person.name} ID:#{person.id} Age:#{person.age}"
-        end
-        
+      case person
+      when Teacher
+        puts "[Teacher] Name:#{person.name} ID: #{person.id}  Age:#{person.age}"
+      when Student
+        puts "[Student] Name:#{person.name} ID:#{person.id} Age:#{person.age}"
+      else
+        puts "Unknown Type: Name: #{person.name} ID:#{person.id} Age:#{person.age}"
+      end
     end
   end
 
@@ -45,7 +44,6 @@ class App
     else
       puts 'Invalid option'
     end
-    
   end
 
   def create_teacher
@@ -68,7 +66,7 @@ class App
   def find_or_create_specialization(label)
     specialization = @specializations.find { |s| s.label == label }
     specialization ||= Specialization.new(label)
-    @specializations << specialization    
+    @specializations << specialization
     specialization
   end
 
