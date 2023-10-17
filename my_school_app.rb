@@ -3,24 +3,28 @@ require_relative 'application'
 class MySchoolApp
   def initialize
     @app = App.new
+    @choices = {
+      1 => :list_books,
+      2 => :list_people,
+      3 => :create_person,
+      4 => :create_book,
+      5 => :create_rental,
+      6 => :list_rentals_for_person,
+      7 => :quit
+    }
   end
 
   def run
-    welcome_message_shown = false
+    display_custom_welcome
 
     loop do
-      unless welcome_message_shown
-        display_custom_welcome
-        welcome_message_shown = true
-      end
-
       display_custom_menu
       user_choice = gets.chomp.to_i
 
-      process_user_choice(user_choice)
-
-      break if user_choice == 7
+      break if process_user_choice(user_choice) == :quit
     end
+
+    puts 'Thanks for using My School Library App. Goodbye!'
   end
 
   def display_custom_welcome
@@ -41,23 +45,42 @@ class MySchoolApp
   end
 
   def process_user_choice(choice)
-    case choice
-    when 1
-      @app.list_books
-    when 2
-      @app.list_people
-    when 3
-      @app.create_person
-    when 4
-      @app.create_book
-    when 5
-      @app.create_rental
-    when 6
-      @app.list_rentals_for_person
-    when 7
-      puts 'Thanks for using My School Library App. Goodbye!'
+    action = @choices[choice]
+
+    if action
+      send(action)
     else
       puts 'Invalid choice. Please select a valid option.'
     end
+  end
+
+  private
+
+  def list_books
+    @app.list_books
+  end
+
+  def list_people
+    @app.list_people
+  end
+
+  def create_person
+    @app.create_person
+  end
+
+  def create_book
+    @app.create_book
+  end
+
+  def create_rental
+    @app.create_rental
+  end
+
+  def list_rentals_for_person
+    @app.list_rentals_for_person
+  end
+
+  def quit
+    :quit
   end
 end
