@@ -1,8 +1,7 @@
-require_relative 'my_school_app'
+require_relative 'app'
+require_relative 'interface'
 
-def main
-  my_school_app = MySchoolApp.new
-  my_school_app.run
-end
+my_school_app = App.new
+user_interface = UserInterface.new(my_school_app)
 
-main
+user_interface.start
