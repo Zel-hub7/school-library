@@ -12,8 +12,6 @@ class App
     @people = []
     @books = []
     @rentals = []
-    @classrooms = []
-    @specializations = []
   end
 
   def list_books
@@ -24,14 +22,7 @@ class App
   def list_people
     puts 'List of People:'
     @people.each do |person|
-      case person
-      when Teacher
-        puts "[Teacher] Name:#{person.name} ID: #{person.id}  Age:#{person.age}"
-      when Student
-        puts "[Student] Name:#{person.name} ID:#{person.id} Age:#{person.age}"
-      else
-        puts "Unknown Type: Name: #{person.name} ID:#{person.id} Age:#{person.age}"
-      end
+      puts person.description
     end
   end
 
@@ -47,53 +38,23 @@ class App
   end
 
   def create_teacher
-    puts 'Enter age:'
-    age = gets.chomp.to_i
-
-    puts 'Enter name for the teacher:'
-    name = gets.chomp
-
-    puts 'Specialization:'
-    specialization_label = gets.chomp
-
-    specialization = find_or_create_specialization(specialization_label)
-
-    teacher = Teacher.new(specialization, age, name)
-    @people << teacher
-    puts 'Person created successfully!'
-  end
-
-  def find_or_create_specialization(label)
-    specialization = @specializations.find { |s| s.label == label }
-    specialization ||= Specialization.new(label)
-    @specializations << specialization
-    specialization
+    create_person_with_type(Teacher)
   end
 
   def create_student
+    create_person_with_type(Student)
+  end
+
+  def create_person_with_type(person_type)
     puts 'Enter age:'
     age = gets.chomp.to_i
-  
-    puts 'Enter name for the student:'
+
+    puts 'Enter name:'
     name = gets.chomp
-  
-    puts 'Has parent permission?(Y/N):'
-    parent_permission = gets.chomp.upcase == 'Y'
-  
-    student = Student.new(age, name, parent_permission)
-    @people << student
+
+    person = person_type.new(age, name)
+    @people << person
     puts 'Person created successfully!'
-  end
-  
-
-  def find_or_create_classroom(label)
-    classroom = @classrooms.find { |c| c.label == label }
-    unless classroom
-      classroom = Classroom.new(label)
-      @classrooms << classroom
-    end
-
-    classroom
   end
 
   def create_book
@@ -107,36 +68,55 @@ class App
   end
 
   def create_rental
-    puts 'Select a person from the following list by number (not id):'
+    person = select_person('Select a person by number:')
+    return unless person
+
+    book = select_book('Select a book by number:')
+    return unless book
+
+    date = get_valid_date
+    return unless date
+
+    rental = Rental.new(date, book, person)
+    @rentals << rental
+    puts 'Rental created successfully'
+  end
+
+  def select_person(prompt)
+    puts prompt
     list_people_with_numbers
     person_number = gets.chomp.to_i
 
     selected_person = @people[person_number - 1]
 
-    if selected_person
-      puts 'Select a book from the following list by number'
-      list_books_with_numbers
-      book_number = gets.chomp.to_i
+    return selected_person if selected_person
 
-      selected_book = @books[book_number - 1]
+    puts 'Invalid person selection'
+    nil
+  end
 
-      if selected_book
-        puts 'Date (YYYY-MM-DD):'
-        gets.chomp
+  def select_book(prompt)
+    puts prompt
+    list_books_with_numbers
+    book_number = gets.chomp.to_i
 
-        begin
-          date = Time.now
-          rental = Rental.new(date, selected_book, selected_person)
-          @rentals << rental
-          puts 'Rental created successfully'
-        rescue ArgumentError
-          puts 'Invalid date format. Please use YYYY-MM-DD.'
-        end
-      else
-        puts 'Invalid book selection'
-      end
-    else
-      puts 'Invalid person selection'
+    selected_book = @books[book_number - 1]
+
+    return selected_book if selected_book
+
+    puts 'Invalid book selection'
+    nil
+  end
+
+  def get_valid_date
+    puts 'Date (YYYY-MM-DD):'
+    date_str = gets.chomp
+
+    begin
+      Date.parse(date_str)
+    rescue ArgumentError
+      puts 'Invalid date format. Please use YYYY-MM-DD.'
+      nil
     end
   end
 
@@ -148,23 +128,7 @@ class App
 
   def list_people_with_numbers
     @people.each_with_index do |person, index|
-      puts "#{index + 1}. #{person.name} (ID: #{person.id})"
-    end
-  end
-
-  def list_rentals_for_person
-    puts 'ID of person:'
-    person_id = gets.chomp.to_i
-
-    person = @people.find { |p| p.id == person_id }
-
-    if person
-      puts 'Rentals:'
-      person.rentals.each do |rental|
-        puts " Date: #{rental.date.strftime('%y-%m-%d')}, Book: #{rental.book.title} by #{rental.book.author} "
-      end
-    else
-      puts 'Person not found.'
+      puts "#{index + 1}. #{person.description}"
     end
   end
 end

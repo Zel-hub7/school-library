@@ -8,6 +8,7 @@ AllCops:
     - 'C:/Users/Zola/Desktop/school-library/app.rb'
     - 'C:/Users/Zola/Desktop/school-library/main.rb'
     - 'app.rb'
+    - 'interface.rb'
     - "Guardfile"
     - "Rakefile"
     - "node_modules/**/*"
