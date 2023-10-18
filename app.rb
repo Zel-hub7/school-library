@@ -7,6 +7,7 @@ require_relative 'classroom'
 require_relative 'specialization'
 require 'date'
 require 'json'
+require_relative 'writeFile.rb'
 class App
   def initialize
     @people = []
@@ -19,7 +20,8 @@ class App
 
   def load_data
     if File.exist?('books.json')
-      @books = JSON.load(File.read('books.json'))
+      books_data = JSON.load(File.read('books.json'))
+      @books = books_data.map { |book_data| Book.new(book_data['title'], book_data['author']) }
     end
 
     if File.exist?('books.json')
@@ -32,13 +34,12 @@ class App
   end
 
   def save_data
-    File.open('books.json', 'w') do |file|
-      file.write(JSON.dump(@books))
-    end
+    books_data = @books.map { |book| { title: book.title, author: book.author } }
+    WriteFile.new('books.json').write(books_data)
+    
 
-    File.open('people.json', 'w') do |file|
-      file.write(JSON.dump(@people))
-    end
+    WriteFile.new('people.json').write(@people)
+
 
     File.open('rentals.json', 'w') do |file|
       file.write(JSON.dump(@rentals))
@@ -49,7 +50,7 @@ class App
 
   def list_books
     @books.each do |book|
-      puts "Title: #{book['title']}, Author: #{book['author']}, Available: #{book['available'] ? 'Yes' : 'No'}"
+      puts "Title: #{book.title}, Author: #{book.author}, Available: #{book.available ? 'Yes' : 'No'}"
     end
   end
   
@@ -115,6 +116,7 @@ class App
   
     student = Student.new(age, name, parent_permission)
     @people << student
+    save_data
     puts 'Person created successfully!'
   end
   
@@ -136,6 +138,7 @@ class App
     author = gets.chomp
     book = Book.new(title, author)
     @books << book
+    save_data
     puts 'Book created successfully.'
   end
 
