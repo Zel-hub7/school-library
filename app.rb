@@ -24,8 +24,23 @@ class App
       @books = books_data.map { |book_data| Book.new(book_data['title'], book_data['author']) }
     end
 
-    if File.exist?('books.json')
-      @rentals = JSON.load(File.read('books.json'))
+    if File.exist?('people.json')
+      people_data = JSON.load(File.read('people.json'))
+      @people = people_data.map do |person_data|
+        if person_data['type'] == 'teacher'
+          Teacher.new(
+            find_or_create_specialization(person_data['specialization']),
+            person_data['age'],
+            person_data['name']
+          )
+        else
+          Student.new(
+            person_data['age'],
+            person_data['name'],
+            person_data['parent_permission']
+          )
+        end
+      end
     end
 
     if File.exist?('rentals.json')
@@ -36,15 +51,31 @@ class App
   def save_data
     books_data = @books.map { |book| { title: book.title, author: book.author } }
     WriteFile.new('books.json').write(books_data)
-    
-
-    WriteFile.new('people.json').write(@people)
-
-
+  
+    people_data = @people.map do |person|
+      if person.is_a?(Teacher)
+        {
+          type: 'teacher',
+          age: person.age,
+          name: person.name,
+          specialization: person.specialization.label
+        }
+      else
+        {
+          type: 'student',
+          age: person.age,
+          name: person.name,
+          parent_permission: person.parent_permission
+        }
+      end
+    end
+    WriteFile.new('people.json').write(people_data)
+  
     File.open('rentals.json', 'w') do |file|
       file.write(JSON.dump(@rentals))
     end
   end
+  
 
 
 
@@ -57,15 +88,17 @@ class App
 
   def list_people
     @people.each do |person|
-      if person['type'] == 'teacher'
-        puts "Teacher: Name: #{person['name']} ID: #{person['id']} Age: #{person['age']} Specialization: #{person['specialization']}"
-      elsif person['type'] == 'student'
-        puts "Student: Name: #{person['name']} ID: #{person['id']} Age: #{person['age']} Books Checked Out: #{person['books_checked_out'].map { |book| book['title'] }.join(', ')}"
+      if person.is_a?(Teacher)
+        puts "Teacher: Name: #{person.name}, Age: #{person.age}, Specialization: #{person.specialization}"
+      elsif person.is_a?(Student)
+        puts "Student: Name: #{person.name}, Age: #{person.age}, Parent Permission: #{person.parent_permission ? 'Yes' : 'No'}"
       else
-        puts "Unknown Type: ID: #{person['id']} Type: #{person['type']}"
+        puts "Unknown Type: #{person.class}"
       end
     end
   end
+  
+  
   
   
 
