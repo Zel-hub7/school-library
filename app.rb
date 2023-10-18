@@ -6,7 +6,7 @@ require_relative 'student'
 require_relative 'classroom'
 require_relative 'specialization'
 require 'date'
-
+require 'json'
 class App
   def initialize
     @people = []
@@ -14,26 +14,59 @@ class App
     @rentals = []
     @classrooms = []
     @specializations = []
+    load_data
   end
+
+  def load_data
+    if File.exist?('books.json')
+      @books = JSON.load(File.read('books.json'))
+    end
+
+    if File.exist?('books.json')
+      @rentals = JSON.load(File.read('books.json'))
+    end
+
+    if File.exist?('rentals.json')
+      @rentals = JSON.load(File.read('rentals.json'))
+    end
+  end
+
+  def save_data
+    File.open('books.json', 'w') do |file|
+      file.write(JSON.dump(@books))
+    end
+
+    File.open('people.json', 'w') do |file|
+      file.write(JSON.dump(@people))
+    end
+
+    File.open('rentals.json', 'w') do |file|
+      file.write(JSON.dump(@rentals))
+    end
+  end
+
+
 
   def list_books
-    puts 'List of All Books:'
-    @books.each { |book| puts " Title: #{book.title}, Author: #{book.author}" }
+    @books.each do |book|
+      puts "Title: #{book['title']}, Author: #{book['author']}, Available: #{book['available'] ? 'Yes' : 'No'}"
+    end
   end
+  
 
   def list_people
-    puts 'List of People:'
     @people.each do |person|
-      case person
-      when Teacher
-        puts "[Teacher] Name:#{person.name} ID: #{person.id}  Age:#{person.age}"
-      when Student
-        puts "[Student] Name:#{person.name} ID:#{person.id} Age:#{person.age}"
+      if person['type'] == 'teacher'
+        puts "Teacher: Name: #{person['name']} ID: #{person['id']} Age: #{person['age']} Specialization: #{person['specialization']}"
+      elsif person['type'] == 'student'
+        puts "Student: Name: #{person['name']} ID: #{person['id']} Age: #{person['age']} Books Checked Out: #{person['books_checked_out'].map { |book| book['title'] }.join(', ')}"
       else
-        puts "Unknown Type: Name: #{person.name} ID:#{person.id} Age:#{person.age}"
+        puts "Unknown Type: ID: #{person['id']} Type: #{person['type']}"
       end
     end
   end
+  
+  
 
   def create_person
     puts 'Do you want to create a teacher (1) or a student (2)? [Input the number]'

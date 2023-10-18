@@ -15,6 +15,8 @@ def main
 
     process_user_choice(user_choice, my_school_app)
 
+    my_school_app.save_data
+
     break if user_choice == 7
   end
 end
