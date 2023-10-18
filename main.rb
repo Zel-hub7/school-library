@@ -1,4 +1,5 @@
 require_relative 'app'
+require 'json'
 
 def main
   my_school_app = App.new
@@ -55,6 +56,10 @@ def process_user_choice(choice, app_instance)
   else
     puts 'Invalid choice. Please select a valid option.'
   end
+end
+
+at_exit do
+  app.save_data
 end
 
 

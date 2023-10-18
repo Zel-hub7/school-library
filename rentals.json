@@ -1,0 +1,68 @@
+[
+    {
+      "date": "2022-10-15",
+      "book": {
+        "title": "Mystery at Midnight",
+        "author": "John Writer"
+      },
+      "person": {
+        "type": "student",
+        "id": 111,
+        "age": 19,
+        "name": "Emily"
+      }
+    },
+    {
+      "date": "2023-08-27",
+      "book": {
+        "title": "Adventure in the Jungle",
+        "author": "Amy Novelist"
+      },
+      "person": {
+        "type": "student",
+        "id": 222,
+        "age": 22,
+        "name": "Michael"
+      }
+    },
+    {
+      "date": "2023-12-31",
+      "book": {
+        "title": "Coding for Beginners",
+        "author": "David Programmer"
+      },
+      "person": {
+        "type": "teacher",
+        "id": 333,
+        "age": 30,
+        "name": "Professor Smith"
+      }
+    },
+    {
+      "date": "2021-05-18",
+      "book": {
+        "title": "Sci-Fi Adventure",
+        "author": "Sci-Fi Enthusiast"
+      },
+      "person": {
+        "type": "student",
+        "id": 444,
+        "age": 21,
+        "name": "Olivia"
+      }
+    },
+    {
+      "date": "2020-11-02",
+      "book": {
+        "title": "Historical Mysteries",
+        "author": "History Buff"
+      },
+      "person": {
+        "type": "student",
+        "id": 555,
+        "age": 20,
+        "name": "James"
+      }
+    }
+]
+  
