@@ -217,23 +217,32 @@ class App
 
   def list_people_with_numbers
     @people.each_with_index do |person, index|
-      puts "#{index + 1}. #{person.name} (ID: #{person.id})"
+      if person.is_a?(Student)
+        puts "#{index + 1}. #{person.name} (ID: #{person.id if person.respond_to?(:id)})"
+      else
+        puts "#{index + 1}. #{person.name}"
+      end
     end
   end
+  
+  
 
   def list_rentals_for_person
-    puts 'ID of person:'
-    person_id = gets.chomp.to_i
-
-    person = @people.find { |p| p.id == person_id }
-
-    if person
+    puts 'Select a person from the following list by number (not id):'
+    list_people_with_numbers
+    person_number = gets.chomp.to_i
+  
+    if person_number >= 1 && person_number <= @people.length
+      selected_person = @people[person_number - 1]
+  
       puts 'Rentals:'
-      person.rentals.each do |rental|
+      selected_person.rentals.each do |rental|
         puts " Date: #{rental.date.strftime('%y-%m-%d')}, Book: #{rental.book.title} by #{rental.book.author} "
       end
     else
-      puts 'Person not found.'
+      puts 'Invalid person selection.'
     end
   end
+  
+  
 end
