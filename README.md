@@ -88,11 +88,15 @@ it will install the required gemfile for running the project
 
 <!-- AUTHORS -->
 
-## 👥 Author <a name="author"></a>
+## 👥 Authors <a name="author"></a>
 
 👤 Zelalem Yohannes
 
 - GitHub: [@Zelalem](https://github.com/Zel-hub7)
+
+👤 Young Gaius
+
+- GitHub: [@Young Gaius](https://github.com/Young-Gaius)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

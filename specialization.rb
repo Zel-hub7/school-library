@@ -11,4 +11,8 @@ class Specialization
     teachers << teacher
     teacher.specialization = self
   end
+
+  def to_s
+    label
+  end
 end

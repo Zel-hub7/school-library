@@ -1,0 +1,20 @@
+[
+  {
+    "type": "teacher",
+    "age": 33333333,
+    "name": "ffffffffffff",
+    "specialization": "dddddddddd"
+  },
+  {
+    "type": "student",
+    "age": 3333333,
+    "name": "dd",
+    "parent_permission": true
+  },
+  {
+    "type": "teacher",
+    "age": 44,
+    "name": "james",
+    "specialization": "biology"
+  }
+]
