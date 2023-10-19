@@ -7,7 +7,7 @@ require_relative 'classroom'
 require_relative 'specialization'
 require 'date'
 require 'json'
-require_relative 'writeFile.rb'
+require_relative 'writeFile'
 class App
   def initialize
     @people = []
@@ -43,15 +43,15 @@ class App
       end
     end
 
-    if File.exist?('rentals.json')
-      @rentals = JSON.load(File.read('rentals.json'))
-    end
+    return unless File.exist?('rentals.json')
+
+    @rentals = JSON.load(File.read('rentals.json'))
   end
 
   def save_data
     books_data = @books.map { |book| { title: book.title, author: book.author } }
     WriteFile.new('books.json').write(books_data)
-  
+
     people_data = @people.map do |person|
       if person.is_a?(Teacher)
         {
@@ -70,21 +70,15 @@ class App
       end
     end
     WriteFile.new('people.json').write(people_data)
-  
-    File.open('rentals.json', 'w') do |file|
-      file.write(JSON.dump(@rentals))
-    end
+
+    File.write('rentals.json', JSON.dump(@rentals))
   end
-  
-
-
 
   def list_books
     @books.each do |book|
       puts "Title: #{book.title}, Author: #{book.author}, Available: #{book.available ? 'Yes' : 'No'}"
     end
   end
-  
 
   def list_people
     @people.each do |person|
@@ -97,10 +91,6 @@ class App
       end
     end
   end
-  
-  
-  
-  
 
   def create_person
     puts 'Do you want to create a teacher (1) or a student (2)? [Input the number]'
@@ -140,19 +130,18 @@ class App
   def create_student
     puts 'Enter age:'
     age = gets.chomp.to_i
-  
+
     puts 'Enter name for the student:'
     name = gets.chomp
-  
+
     puts 'Has parent permission?(Y/N):'
     parent_permission = gets.chomp.upcase == 'Y'
-  
+
     student = Student.new(age, name, parent_permission)
     @people << student
     save_data
     puts 'Person created successfully!'
   end
-  
 
   def find_or_create_classroom(label)
     classroom = @classrooms.find { |c| c.label == label }
@@ -224,17 +213,15 @@ class App
       end
     end
   end
-  
-  
 
   def list_rentals_for_person
     puts 'Select a person from the following list by number (not id):'
     list_people_with_numbers
     person_number = gets.chomp.to_i
-  
+
     if person_number >= 1 && person_number <= @people.length
       selected_person = @people[person_number - 1]
-  
+
       puts 'Rentals:'
       selected_person.rentals.each do |rental|
         puts " Date: #{rental.date.strftime('%y-%m-%d')}, Book: #{rental.book.title} by #{rental.book.author} "
@@ -243,6 +230,4 @@ class App
       puts 'Invalid person selection.'
     end
   end
-  
-  
 end

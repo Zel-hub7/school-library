@@ -10,4 +10,3 @@ class Student
     @rentals = []
   end
 end
-
